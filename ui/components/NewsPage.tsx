@@ -20,7 +20,7 @@ const NewsPage = () => {
       try {
         console.log("Fetching news...");
         const response = await fetch(
-          "https://raw.githubusercontent.com/newspedia-crew/newspedia-web/intern-change/public/data/index.json",
+          "https://raw.githubusercontent.com/newspedia-crew/newspedia-web/intern-changes/public/data/index.json",
         );
         console.log("Response status:", response.status);
         if (!response.ok) {

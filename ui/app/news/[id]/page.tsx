@@ -1,20 +1,61 @@
-import NewsDetail from "../../../components/NewsDetail";
-import { VALIDATED_ENV } from "../../../lib/constants";
+"use client";
 
-async function getNewsData(id: string) {
-  const res = await fetch(`${VALIDATED_ENV.API_URL}/news/${id}`, { next: { revalidate: 60 } });
-  if (!res.ok) {
-    throw new Error("Failed to fetch news");
-  }
-  return res.json();
+import React from "react";
+import NewsDetail from "@/components/NewsDetail";
+import { useParams } from "next/navigation";
+
+interface NewsType {
+  title: string;
+  sections: {
+    title: string;
+    content: string;
+    context: {
+      name: string;
+      url: string;
+      description: string;
+      provider: {
+        name: string;
+        image?: {
+          thumbnail: {
+            contentUrl: string;
+          };
+        };
+      }[];
+      datePublished: string;
+      image?: {
+        contentUrl: string;
+        thumbnail: {
+          contentUrl: string;
+          width: number;
+          height: number;
+        };
+      };
+      article?: string;
+      score?: number;
+    }[];
+  }[];
 }
 
-export default async function NewsPage({ params }: { params: { id: string } }) {
-  const newsData = await getNewsData(params.id);
+const NewsPage = () => {
+  const [news, setNews] = React.useState<NewsType | null>(null);
+  const params = useParams();
+  const { id } = params;
 
-  if (!newsData) {
-    return <div className="text-center text-red-500">News not found or failed to load</div>;
+  React.useEffect(() => {
+    const fetchNews = async () => {
+      const response = await fetch(`/api/news/${id}`);
+      const data = await response.json();
+      setNews(data);
+    };
+
+    fetchNews();
+  }, [id]);
+
+  if (!news) {
+    return <div>Loading...</div>;
   }
 
-  return <NewsDetail news={newsData} />;
-}
+  return <NewsDetail news={news} />;
+};
+
+export default NewsPage;

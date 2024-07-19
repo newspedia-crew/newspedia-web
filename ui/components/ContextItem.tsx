@@ -23,48 +23,59 @@ interface ContextItemProperties {
   };
 }
 
+const ProviderInfo: React.FC<{ name: string; date: string }> = ({ name, date }) => (
+  <div className="absolute bottom-3 right-0 text-sm text-gray-700 dark:text-gray-300 flex items-end z-50">
+    <div className="absolute z-50 right-60 top-0 bottom-0 w-40 h-10 bg-gradient-to-r from-transparent to-slate-900 pointer-events-none"></div>
+    <div className="absolute z-50 right-0 top-0 bottom-0 w-60 h-10 bg-slate-900 pointer-events-none"></div>
+    <div className="relative z-50 dark:bg-slate-900 flex items-center">
+      <span className="truncate max-w-xs">{name}</span>
+      <span className="truncate max-w-xs text-xs text-gray-500 dark:text-gray-400 pl-3">{date}</span>
+    </div>
+  </div>
+);
+
 const ContextItem: React.FC<ContextItemProperties> = ({ item }) => {
   return (
-    <div className="border p-4 rounded-lg mb-4 dark:border-gray-700">
-      <h4 className="font-bold text-black dark:text-white">{item.name}</h4>
-      {item.image && (
-        <Image
-          src={item.image.contentUrl}
-          alt={item.name}
-          width={item.image.thumbnail.width}
-          height={item.image.thumbnail.height}
-          className="my-2 rounded"
-        />
-      )}
-      <div className="text-black dark:text-white">
-        <ReactMarkdown text={item.description} />
-      </div>
-      <a
-        href={item.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-black dark:text-white hover:underline inline-block mt-2"
+    <a
+      href={item.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block no-underline text-black dark:text-white"
+    >
+      <div
+        className="bg-gray-200 dark:bg-slate-900 rounded-lg px-6 py-2 ring-1 items-stretch h-56
+      ring-slate-900/5 shadow-xl flex flex-row cursor-pointer hover:scale-95 transition-transform duration-300"
       >
-        Read more
-      </a>
-      <div className="mt-2">
-        <div className="flex items-center text-sm text-gray-700 dark:text-gray-300">
-          {item.provider[0].image && (
+        <div className="w-40 h-40 flex-shrink-0">
+          {item.image ? (
             <Image
-              src={item.provider[0].image.thumbnail.contentUrl}
-              alt={`${item.provider[0].name} logo`}
-              width={16}
-              height={16}
-              className="mr-2"
+              src={item.image.contentUrl}
+              alt={item.name}
+              width={150}
+              height={150}
+              className="rounded w-36 h-36 object-cover"
+            />
+          ) : (
+            <Image
+              src={"https://via.placeholder.com/150"}
+              alt={"placeholder"}
+              width={150}
+              height={150}
+              className="rounded w-36 h-36 object-cover"
             />
           )}
-          {item.provider[0].name}
         </div>
-        <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-          {new Date(item.datePublished).toLocaleDateString()}
+        <div className="flex flex-col items-stretch relative h-48">
+          <div className="flex justify-start max-w-xl">
+            <h4 className="font-bold text-white truncate">{item.name}</h4>
+          </div>
+          <div className="max-32 overflow-hidden">
+            <ReactMarkdown text={item.description} className="text-slate-500 dark:text-slate-400 line-clamp-3" />
+          </div>
+          <ProviderInfo name={item.provider[0].name} date={new Date(item.datePublished).toLocaleDateString()} />
         </div>
       </div>
-    </div>
+    </a>
   );
 };
 

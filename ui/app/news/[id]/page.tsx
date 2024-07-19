@@ -1,5 +1,5 @@
 "use client";
-
+// will change
 import React from "react";
 import NewsDetail from "@/components/NewsDetail";
 import { useParams } from "next/navigation";

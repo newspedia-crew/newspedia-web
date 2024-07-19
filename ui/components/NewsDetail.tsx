@@ -1,5 +1,6 @@
 import React from "react";
 import ContextItem from "./ContextItem";
+import ExpandableItems from "./ExpandableItems";
 import NewsSidebar from "./NewsSidebar";
 import { Element } from "react-scroll";
 
@@ -52,9 +53,7 @@ const NewsDetail: React.FC<NewsDetailProperties> = ({ news }) => {
                 <p className="text-black dark:text-white">{section.content}</p>
                 <div className="mt-4">
                   <h3 className="text-black dark:text-white">Related Context:</h3>
-                  {section.context.map((item, index_) => (
-                    <ContextItem key={index_} item={item} />
-                  ))}
+                  <ExpandableItems context={section.context} />
                 </div>
               </section>
             </Element>

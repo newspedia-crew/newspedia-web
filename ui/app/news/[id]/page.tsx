@@ -1,8 +1,9 @@
 "use client";
-// will change
+
 import React from "react";
 import NewsDetail from "@/components/NewsDetail";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
+import { scroller } from "react-scroll";
 
 interface NewsType {
   title: string;
@@ -39,7 +40,9 @@ interface NewsType {
 const NewsPage = () => {
   const [news, setNews] = React.useState<NewsType | null>(null);
   const params = useParams();
+  const searchParams = useSearchParams();
   const { id } = params;
+  const section = searchParams.get("section");
 
   React.useEffect(() => {
     const fetchNews = async () => {
@@ -50,6 +53,16 @@ const NewsPage = () => {
 
     fetchNews();
   }, [id]);
+
+  React.useEffect(() => {
+    if (news && section) {
+      scroller.scrollTo(`section-${section}`, {
+        duration: 800,
+        delay: 0,
+        smooth: "easeInOutQuart",
+      });
+    }
+  }, [news, section]);
 
   if (!news) {
     return <div>Loading...</div>;

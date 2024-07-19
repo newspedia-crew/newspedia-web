@@ -4,7 +4,7 @@ import { Link, Events, scrollSpy } from "react-scroll";
 interface NewsSidebarProps {
   sections: { title: string }[];
 }
-
+//sidebar
 const NewsSidebar: React.FC<NewsSidebarProps> = ({ sections }) => {
   React.useEffect(() => {
     const handleScrollEvent = (...args: unknown[]) => {

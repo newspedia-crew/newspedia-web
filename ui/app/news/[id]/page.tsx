@@ -5,40 +5,48 @@ import NewsDetail from "@/components/NewsDetail";
 import { useParams, useSearchParams } from "next/navigation";
 import { scroller } from "react-scroll";
 
-interface NewsType {
-  title: string;
-  sections: {
-    title: string;
-    content: string;
-    context: {
-      name: string;
-      url: string;
-      description: string;
-      provider: {
-        name: string;
-        image?: {
-          thumbnail: {
-            contentUrl: string;
-          };
-        };
-      }[];
-      datePublished: string;
-      image?: {
-        contentUrl: string;
-        thumbnail: {
-          contentUrl: string;
-          width: number;
-          height: number;
-        };
-      };
-      article?: string;
-      score?: number;
-    }[];
-  }[];
+interface IImage {
+  contentUrl: string;
+  thumbnail: {
+    contentUrl: string;
+    width: number;
+    height: number;
+  };
 }
 
-const NewsPage = () => {
-  const [news, setNews] = React.useState<NewsType | null>(null);
+interface IProvider {
+  name: string;
+  image?: {
+    thumbnail: {
+      contentUrl: string;
+    };
+  };
+}
+
+interface IContextItem {
+  name: string;
+  url: string;
+  description: string;
+  provider: IProvider[];
+  datePublished: string;
+  image?: IImage;
+  article?: string;
+  score?: number;
+}
+
+interface ISection {
+  title: string;
+  content: string;
+  context: IContextItem[];
+}
+
+interface INews {
+  title: string;
+  sections: ISection[];
+}
+
+const NewsPage: React.FC = () => {
+  const [news, setNews] = React.useState<INews | null>(null);
   const params = useParams();
   const searchParams = useSearchParams();
   const { id } = params;

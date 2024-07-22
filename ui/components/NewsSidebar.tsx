@@ -4,7 +4,7 @@ import { Link, Events, scrollSpy } from "react-scroll";
 interface NewsSidebarProps {
   sections: { title: string }[];
 }
-//sidebar
+
 const NewsSidebar: React.FC<NewsSidebarProps> = ({ sections }) => {
   React.useEffect(() => {
     const handleScrollEvent = (...args: unknown[]) => {
@@ -30,14 +30,14 @@ const NewsSidebar: React.FC<NewsSidebarProps> = ({ sections }) => {
           {sections.map((section, index) => (
             <li key={index} className="relative">
               <Link
-                activeClass="font-bold"
+                activeClass="font-bold text-blue-600 dark:text-blue-400"
                 to={`section-${index}`}
                 spy={true}
                 smooth={true}
                 duration={500}
                 className="block pl-6 cursor-pointer transition-colors hover:text-blue-500 dark:hover:text-blue-400"
               >
-                <span className="absolute left-0 top-3 transform -translate-y-1/2 w-4 h-4 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 rounded-full"></span>
+                <span className="absolute left-0 top-3 transform -translate-y-1/2 w-4 h-4 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 rounded-full transition-colors duration-300 ease-in-out"></span>
                 <span className="inline-block">{section.title}</span>
               </Link>
             </li>

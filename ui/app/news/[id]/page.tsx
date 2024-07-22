@@ -1,20 +1,82 @@
-import NewsDetail from "../../../components/NewsDetail";
-import { VALIDATED_ENV } from "../../../lib/constants";
+"use client";
 
-async function getNewsData(id: string) {
-  const res = await fetch(`${VALIDATED_ENV.API_URL}/news/${id}`, { next: { revalidate: 60 } });
-  if (!res.ok) {
-    throw new Error("Failed to fetch news");
-  }
-  return res.json();
+import React from "react";
+import NewsDetail from "@/components/NewsDetail";
+import { useParams, useSearchParams } from "next/navigation";
+import { scroller } from "react-scroll";
+
+interface IImage {
+  contentUrl: string;
+  thumbnail: {
+    contentUrl: string;
+    width: number;
+    height: number;
+  };
 }
 
-export default async function NewsPage({ params }: { params: { id: string } }) {
-  const newsData = await getNewsData(params.id);
+interface IProvider {
+  name: string;
+  image?: {
+    thumbnail: {
+      contentUrl: string;
+    };
+  };
+}
 
-  if (!newsData) {
-    return <div className="text-center text-red-500">News not found or failed to load</div>;
+interface IContextItem {
+  name: string;
+  url: string;
+  description: string;
+  provider: IProvider[];
+  datePublished: string;
+  image?: IImage;
+  article?: string;
+  score?: number;
+}
+
+interface ISection {
+  title: string;
+  content: string;
+  context: IContextItem[];
+}
+
+interface INews {
+  title: string;
+  sections: ISection[];
+}
+
+const NewsPage: React.FC = () => {
+  const [news, setNews] = React.useState<INews | null>(null);
+  const params = useParams();
+  const searchParams = useSearchParams();
+  const { id } = params;
+  const section = searchParams.get("section");
+
+  React.useEffect(() => {
+    const fetchNews = async () => {
+      const response = await fetch(`/api/news/${id}`);
+      const data = await response.json();
+      setNews(data);
+    };
+
+    fetchNews();
+  }, [id]);
+
+  React.useEffect(() => {
+    if (news && section) {
+      scroller.scrollTo(`section-${section}`, {
+        duration: 800,
+        delay: 0,
+        smooth: "easeInOutQuart",
+      });
+    }
+  }, [news, section]);
+
+  if (!news) {
+    return <div>Loading...</div>;
   }
 
-  return <NewsDetail news={newsData} />;
-}
+  return <NewsDetail news={news} />;
+};
+
+export default NewsPage;
